@@ -47,7 +47,7 @@ function handleTurn(event) {
  let idx = squares.findIndex(square => {
   return square === event.target;
  });
- if (!board[idx]) {
+ if (!board[idx] && !win) {
    board[idx] = turn;
    turn = turn === 'X' ? 'O' : 'X';
    render();
@@ -60,8 +60,9 @@ function handleTurn(event) {
 function init() {
  board = ['','','','','','','','',''];
  render();
+ win = null;
 };
-init();
+init()
 
 function render() {
  board.forEach((mark, index) => {
