@@ -32,7 +32,12 @@ function getWinner() {
    winner = board[combo[0]];
   }
  });
- return winner ? winner : board.includes('') ? null : 'T';
+ 
+ if (!winner && !board.includes('')) {
+  winner = 'T'
+ }
+
+ return winner;
 };
 
 function handleTurn(event) {
@@ -58,7 +63,7 @@ function render() {
  board.forEach((mark, index) => {
   squares[index].textContent = mark;
  });
-
+ 
  messages.textContent = win === 'T' ? `Tie!` : win ?  `${win} wins the game!` : `It's ${turn}'s turn!`;
 };
 
