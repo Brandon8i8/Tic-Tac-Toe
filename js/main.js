@@ -26,19 +26,24 @@ document.getElementById('board').addEventListener('click', handleTurn);
 function getWinner() {
   let winner = null;
   winningCombos.forEach(function(combo, index) {
-    if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) winner = board[combo[0]];
+    if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) 
+    
+    winner = board[combo[0]];
   });
-  return winner;
+  return winner ? winner : board.includes('') ? null : 'T';
 };
 
 function handleTurn(event) {
   let idx = squares.findIndex(function(square) {
     return square === event.target;
   });
-
-  board[idx] = turn;
-  win = getWinner();
-  render();
+  if (!board[idx] && !win) {
+   board[idx] = turn;
+   turn = turn === 'X' ? 'O' : 'X';
+   render();
+   win = getWinner();
+   render();
+ };
 };
 
 function init() {
@@ -51,5 +56,5 @@ function render() {
   board.forEach(function(mark, index) {
     squares[index].textContent = mark;
   });
-  messages.textContent = win ? `${win} wins the game!` : `It's ${turn}'s turn!`;
+  messages.textContent = win === 'T' ? `Tie!` : win ? `${win} wins the game!` : `It's ${turn}'s turn!`;
 };
