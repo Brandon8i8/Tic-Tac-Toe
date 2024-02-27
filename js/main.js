@@ -12,23 +12,24 @@ const winningCombos = [
 
 /*----- app's state (variables) -----*/
 let board;
-let turn = 'X';
+let current = 'X';
 let win;
 
 /*----- cached element references -----*/
 const squares = Array.from(document.querySelectorAll('#board div'));
-const messages = document.querySelector('h2');
 
 /*----- event listeners -----*/
 document.getElementById('board').addEventListener('click', handleTurn);
+const messages = document.querySelector('h2');
+document.getElementById('reset-button').addEventListener('click', init);
 
 /*----- functions -----*/
 function getWinner() {
   let winner = null;
-  winningCombos.forEach(function(combo, index) {
-    if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) 
-    
-    winner = board[combo[0]];
+  winningCombos.forEach(function(combo) {
+    if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) {
+      winner = board[combo[0]];    
+    }
   });
   return winner ? winner : board.includes('') ? null : 'T';
 };
@@ -37,24 +38,22 @@ function handleTurn(event) {
   let idx = squares.findIndex(function(square) {
     return square === event.target;
   });
-  if (!board[idx] && !win) {
-   board[idx] = turn;
-   turn = turn === 'X' ? 'O' : 'X';
-   render();
-   win = getWinner();
-   render();
- };
+  board[idx] = current;
+  current = current === 'X' ? 'O' : 'X';
+  win = getWinner();
+  render();
 };
 
 function init() {
   board = ['','','','','','','','',''];
   render();
 };
-init();
 
 function render() {
   board.forEach(function(mark, index) {
     squares[index].textContent = mark;
   });
-  messages.textContent = win === 'T' ? `Tie!` : win ? `${win} wins the game!` : `It's ${turn}'s turn!`;
+  messages.textContent = win === 'T' ? `Tie!` : win ? `${win} wins the game!` : `It's ${current}'s turn!`;
 };
+
+init();
